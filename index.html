@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>🔥 FREE FIRE — MÓNICA FF 💛</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', sans-serif; }
+  html, body {
+    width:100%; height:100%; overflow:hidden; background:#000; color:white;
+    /* Forzar pantalla horizontal */
+    transform:rotate(0deg);
+  }
+
+  /* 🏟️ Fondo del Lobby con efectos */
+  .lobby-bg {
+    position:fixed; inset:0;
+    background:
+      radial-gradient(ellipse at 20% 10%, rgba(255,150,0,0.18) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 15%, rgba(255,50,100,0.12) 0%, transparent 50%),
+      linear-gradient(180deg, #1a0a00 0%, #3d1a00 30%, #5c2a00 50%, #2a1000 100%);
+    z-index:0;
+  }
+
+  /* Rayos de luz */
+  .light-rays {
+    position:fixed; top:0; left:50%; transform:translateX(-50%);
+    width:400px; height:500px;
+    background:linear-gradient(180deg, rgba(255,200,0,0.18), transparent 70%);
+    z-index:1; pointer-events:none;
+    animation: lightPulse 3s infinite alternate;
+  }
+  @keyframes lightPulse {
+    0% { opacity:0.4; }
+    100% { opacity:0.9; }
+  }
+
+  /* Partículas brillantes */
+  .particles {
+    position:fixed; inset:0; z-index:1; pointer-events:none;
+    background-image:
+      radial-gradient(2px 2px at 10% 20%, rgba(255,215,0,0.8), transparent),
+      radial-gradient(1px 1px at 20% 80%, rgba(255,255,255,0.6), transparent),
+      radial-gradient(2px 2px at 70% 30%, rgba(255,100,50,0.7), transparent),
+      radial-gradient(1px 1px at 80% 70%, rgba(255,215,0,0.6), transparent),
+      radial-gradient(2px 2px at 50% 50%, rgba(255,255,255,0.5), transparent);
+    background-size:150px 150px;
+    animation: floatParticles 8s infinite linear;
+  }
+  @keyframes floatParticles {
+    0% { transform:translateY(0); }
+    100% { transform:translateY(-150px); }
+  }
+
+  /* Público brillando */
+  .crowd {
+    position:fixed; bottom:25%; left:0; width:100%; height:250px;
+    background:radial-gradient(ellipse at center, rgba(255,255,255,0.08) 0%, transparent 70%);
+    z-index:1; pointer-events:none;
+  }
+
+  /* 🏷️ Barra Superior */
+  .top-bar {
+    position:relative; z-index:5; padding:10px 12px; display:flex; align-items:center; justify-content:space-between;
+    background:linear-gradient(180deg, rgba(0,0,0,0.8), transparent);
+  }
+  .profile-left { display:flex; align-items:center; gap:10px; }
+  .avatar-box { position:relative; }
+  .avatar { width:45px; height:45px; border-radius:8px; background:linear-gradient(45deg,#ffd700,#ff8c00); display:flex; align-items:center; justify-content:center; font-size:24px; border:2px solid #fff; }
+  .level-badge { position:absolute; bottom:-5px; right:-5px; background:#ffd700; color:#000; font-size:10px; font-weight:bold; padding:1px 5px; border-radius:8px; }
+  .player-name { font-weight:bold; font-size:15px; text-shadow:0 0 5px #000; }
+  .player-tag { font-size:11px; color:#aaa; }
+  .currency { display:flex; gap:10px; align-items:center; }
+  .curr-item { display:flex; align-items:center; gap:4px; background:rgba(0,0,0,0.5); padding:4px 8px; border-radius:12px; font-size:13px; }
+  .c-gold { color:#ffd700; } .c-dia { color:#00d4ff; }
+  .rank-icon { width:35px; height:35px; background:linear-gradient(45deg,#b8860b,#ffd700); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:18px; }
+  .top-icons { display:flex; gap:12px; font-size:20px; }
+
+  /* 📋 Menú Lateral */
+  .side-menu {
+    position:absolute; left:12px; top:120px; z-index:5; display:flex; flex-direction:column; gap:8px;
+  }
+  .side-btn {
+    background:linear-gradient(90deg, rgba(180,80,0,0.8), rgba(120,50,0,0.6));
+    border:none; color:white; padding:10px 15px; border-radius:6px; font-size:14px; font-weight:bold;
+    display:flex; align-items:center; gap:8px; cursor:pointer;
+    border-left:3px solid #ffd700;
+    box-shadow:0 2px 8px rgba(0,0,0,0.4);
+  }
+  .side-btn:nth-child(2) { background:linear-gradient(90deg, rgba(120,0,180,0.8), rgba(80,0,120,0.6)); border-left-color:#e040fb; }
+  .side-btn:nth-child(3) { background:linear-gradient(90deg, rgba(0,100,150,0.8), rgba(0,60,100,0.6)); border-left-color:#00bcd4; }
+  .side-btn:nth-child(4) { background:linear-gradient(90deg, rgba(0,80,20,0.8), rgba(0,50,10,0.6)); border-left-color:#4caf50; }
+  .side-btn:nth-child(5) { background:linear-gradient(90deg, rgba(150,50,0,0.8), rgba(100,30,0,0.6)); border-left-color:#ff9800; }
+  .side-btn:active { transform:scale(0.97); }
+
+  /* 👩‍🦰 Personaje */
+  .char-area {
+    position:absolute; top:50%; left:50%; transform:translate(-50%, -50%);
+    z-index:3; display:flex; flex-direction:column; align-items:center;
+  }
+  .char-container {
+    position:relative; animation: charIdle 2.5s ease-in-out infinite;
+  }
+  @keyframes charIdle {
+    0%,100% { transform:translateY(0); }
+    50% { transform:translateY(-6px); }
+  }
+  .char-body { font-size:200px; line-height:1; filter: drop-shadow(0 0 30px rgba(255,100,50,0.4)); }
+  .horns {
+    position:absolute; top:-15px; left:50%; transform:translateX(-50%);
+    font-size:80px; line-height:1;
+    background:linear-gradient(180deg, #ffd700, #fff8dc, #ffd700);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+    background-clip:text;
+    filter: drop-shadow(0 0 10px #ffd700) drop-shadow(0 0 20px #ff8c00);
+    animation: hornGlow 1.5s ease-in-out infinite alternate;
+  }
+  @keyframes hornGlow {
+    0% { filter: drop-shadow(0 0 10px #ffd700) drop-shadow(0 0 20px #ff8c00); }
+    100% { filter: drop-shadow(0 0 20px #ffd700) drop-shadow(0 0 40px #ff8c00) drop-shadow(0 0 60px rgba(255,215,0,0.4)); }
+  }
+  .char-glow {
+    position:absolute; top:50%; left:50%; transform:translate(-50%, -50%);
+    width:250px; height:350px; background:radial-gradient(ellipse, rgba(255,100,0,0.2), transparent 70%);
+    border-radius:50%; z-index:-1; animation: pulseGlow 2s infinite;
+  }
+  @keyframes pulseGlow {
+    0%,100% { opacity:0.5; transform:translate(-50%, -50%) scale(1); }
+    50% { opacity:0.8; transform:translate(-50%, -50%) scale(1.1); }
+  }
+  .char-name { margin-top:10px; font-size:18px; font-weight:bold; color:#ffd700; text-shadow:0 0 10px #000; }
+
+  /* 🎭 Emotes */
+  .emote-btn {
+    position:absolute; top:50%; right:30px; transform:translateY(-50%);
+    width:55px; height:55px; border-radius:50%; background:rgba(0,0,0,0.6);
+    border:2px solid #ffd700; color:white; font-size:24px; cursor:pointer; z-index:4;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .emote-wheel {
+    position:fixed; inset:0; background:rgba(0,0,0,0.92); z-index:20;
+    display:none; align-items:center; justify-content:center;
+  }
+  .emote-wheel.active { display:flex; }
+  .emote-grid {
+    display:grid; grid-template-columns:repeat(4,1fr); gap:15px; padding:30px;
+  }
+  .emote-item {
+    width:70px; height:70px; border-radius:12px; background:rgba(255,255,255,0.1);
+    border:2px solid #ffd700; font-size:35px; display:flex; align-items:center; justify-content:center;
+    cursor:pointer; transition:all 0.2s;
+  }
+  .emote-item:hover { transform:scale(1.1); background:rgba(255,215,0,0.2); }
+  .close-emotes {
+    position:absolute; top:20px; right:20px; background:#ff0055; color:white;
+    border:none; width:45px; height:45px; border-radius:50%; font-size:24px; cursor:pointer;
+  }
+  .emote-display {
+    position:fixed; bottom:200px; left:50%; transform:translateX(-50%);
+    font-size:60px; z-index:25; animation: emotePop 2s forwards;
+  }
+  @keyframes emotePop {
+    0% { opacity:0; transform:translateX(-50%) scale(0.5); }
+    20% { opacity:1; transform:translateX(-50%) scale(1.2); }
+    80% { opacity:1; transform:translateX(-50%) scale(1); }
+    100% { opacity:0; transform:translateX(-50%) translateY(-50px) scale(1); }
+  }
+
+  /* 📊 Modo de Juego */
+  .mode-panel {
+    position:absolute; bottom:130px; right:15px; z-index:5;
+    background:linear-gradient(135deg, rgba(40,20,0,0.9), rgba(20,10,0,0.9));
+    border:2px solid rgba(255,215,0,0.4); border-radius:12px; padding:12px; width:220px;
+  }
+  .mode-title { font-size:12px; color:#ffd700; margin-bottom:5px; }
+  .mode-name { font-size:16px; font-weight:bold; margin-bottom:8px; }
+  .mode-map { font-size:12px; color:#aaa; margin-bottom:10px; }
+  .mode-buttons { display:flex; gap:8px; }
+  .mode-btn { flex:1; padding:6px; border:none; border-radius:6px; font-size:11px; font-weight:bold; cursor:pointer; }
+  .btn-change { background:linear-gradient(90deg,#ffd700,#ff8c00); color:#000; }
+  .btn-info { background:rgba(255,255,255,0.1); color:white; }
+
+  /* 🎮 Barra Inferior */
+  .bottom-bar {
+    position:absolute; bottom:0; left:0; width:100%; z-index:5;
+    padding:15px; display:flex; align-items:center; justify-content:space-between;
+    background:linear-gradient(0deg, rgba(0,0,0,0.9), transparent);
+  }
+  .bottom-left { display:flex; gap:15px; }
+  .bot-nav { display:flex; flex-direction:column; align-items:center; gap:3px; font-size:11px; color:#ccc; cursor:pointer; }
+  .bot-nav-icon { font-size:22px; }
+  .start-btn {
+    padding:15px 50px; font-size:22px; font-weight:bold; color:#000;
+    background:linear-gradient(90deg, #ffd700, #ffb300, #ffd700);
+    border:none; border-radius:8px; cursor:pointer;
+    box-shadow:0 0 20px rgba(255,215,0,0.5);
+    animation: startPulse 2s infinite;
+  }
+  @keyframes startPulse {
+    0%,100% { box-shadow:0 0 20px rgba(255,215,0,0.5); }
+    50% { box-shadow:0 0 35px rgba(255,215,0,0.7), 0 0 50px rgba(255,180,0,0.4); }
+  }
+
+  /* 🪟 Modales */
+  .modal {
+    position:fixed; inset:0; background:rgba(0,0,0,0.95); z-index:30;
+    display:none; flex-direction:column; align-items:center; padding:20px; overflow-y:auto;
+  }
+  .modal.active { display:flex; }
+  .modal-header { width:100%; max-width:450px; display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; }
+  .modal-title { font-size:24px; color:#ffd700; font-weight:bold; }
+  .close-btn { background:none; border:none; color:white; font-size:28px; cursor:pointer; }
+  .modal-content { width:100%; max-width:450px; }
+
+  /* Modo de Juego */
+  .mode-card {
+    width:100%; border-radius:12px; overflow:hidden; margin-bottom:15px; cursor:pointer;
+    border:2px solid transparent; transition:all 0.2s;
+  }
+  .mode-card:hover, .mode-card.active { border-color:#ffd700; }
+  .mode-card-img { height:150px; background:linear-gradient(135deg,#333,#555); display:flex; align-items:center; justify-content:center; font-size:60px; }
+  .mode-card-body { padding:12px; background:rgba(0,0,0,0.5); }
+  .mode-card-title { font-weight:bold; font-size:16px; margin-bottom:5px; }
+  .mode-card-desc { font-size:12px; color:#aaa; }
+
+  /* Armas */
+  .weapons-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+  .weapon-item { aspect-ratio:3/4; border-radius:8px; background:linear-gradient(135deg,#222,#444); display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; border:2px solid transparent; }
+  .weapon-item.active { border-color:#ffd700; box-shadow:0 0 15px rgba(255,215,0,0.4); }
+  .weapon-icon { font-size:40px; margin-bottom:5px; }
+  .weapon-name { font-size:11px; text-align:center; }
+
+  /* Ropa */
+  .clothes-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+  .clothes-item { aspect-ratio:3/4; border-radius:8px; background:linear-gradient(135deg,#222,#444); display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; border:2px solid transparent; }
+  .clothes-item.active { border-color:#ffd700; box-shadow:0 0 15px rgba(255,215,0,0.4); }
+  .clothes-icon { font-size:40px; margin-bottom:5px; }
+  .clothes-name { font-size:11px; text-align:center; }
+
+  /* Personajes */
+  .chars-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+  .char-item { aspect-ratio:3/4; border-radius:8px; background:linear-gradient(135deg,#222,#444); display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; border:2px solid transparent; }
+  .char-item.active { border-color:#ffd700; box-shadow:0 0 15px rgba(255,215,0,0.4); }
+  .char-item-icon { font-size:40px; margin-bottom:5px; }
+  .char-item-name { font-size:11px; text-align:center; }
+
+  /* Perfil */
+  .profile-card { background:linear-gradient(135deg, #2a1a00, #1a1a00); border-radius:12px; padding:20px; border:2px solid #ffd700; }
+  .profile-header { display:flex; gap:15px; margin-bottom:20px; }
+  .profile-avatar { width:80px; height:80px; border-radius:12px; background:linear-gradient(45deg,#ffd700,#ff8c00); display:flex; align-items:center; justify-content:center; font-size:40px; border:3px solid #fff; }
+  .profile-info h2 { font-size:22px; color:#ffd700; }
+  .profile-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:15px; margin-top:20px; }
+  .stat-box { text-align:center; background:rgba(255,255,255,0.05); border-radius:8px; padding:12px; }
+  .stat-val { font-size:20px; font-weight:bold; color:#ffd700; }
+  .stat-label { font-size:11px; color:#aaa; }
+
+  /* Botones */
+  .btn-action {
+    width:100%; padding:14px; border:none; border-radius:8px; font-size:16px; font-weight:bold; cursor:pointer; margin-top:10px;
+  }
+  .btn-primary { background:linear-gradient(90deg,#ffd700,#ff8c00); color:#000; }
+  .btn-secondary { background:#333; color:white; }
+
+  /* Aviso de pantalla horizontal */
+  .rotate-notice {
+    position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:9999;
+    display:none; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:20px;
+  }
+  .rotate-notice.show { display:flex; }
+  .rotate-notice h2 { color:#ffd700; margin-bottom:10px; }
+  .rotate-notice p { color:#aaa; margin-bottom:20px; }
+  .rotate-btn { padding:15px 30px; background:#ffd700; color:#000; border:none; border-radius:8px; font-weight:bold; cursor:pointer; }
+
+  /* Ajuste horizontal */
+  @media (orientation: landscape) {
+    .rotate-notice { display:none !important; }
+  }
+  @media (orientation: portrait) {
+    .rotate-notice.show { display:flex; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Aviso para girar pantalla -->
+<div class="rotate-notice" id="rotateNotice">
+  <h2>🔄 Gira tu pantalla</h2>
+  <p>Para ver el lobby completo, coloca tu teléfono en horizontal.</p>
+  <button class="rotate-btn" onclick="document.getElementById('rotateNotice').classList.remove('show')">ACEPTAR</button>
+</div>
+
+<div class="lobby-bg"></div>
+<div class="light-rays"></div>
+<div class="particles"></div>
+<div class="crowd"></div>
+
+<!-- 🏷️ Barra Superior -->
+<div class="top-bar">
+  <div class="profile-left">
+    <div class="avatar-box">
+      <div class="avatar">🔥</div>
+      <div class="level-badge">35</div>
+    </div>
+    <div>
+      <div class="player-name">MÓNICA FF</div>
+      <div class="player-tag">Legendaria • Español</div>
+    </div>
+  </div>
+  <div class="currency">
+    <div class="curr-item c-gold" id="goldCoins">💰 999.999</div>
+    <div class="curr-item c-dia" id="diamonds">💎 50.000</div>
+    <div class="rank-icon">👑</div>
+  </div>
+  <div class="top-icons">⚙️ 👥</div>
+</div>
+
+<!-- 📋 Menú Lateral -->
+<div class="side-menu">
+  <button class="side-btn" onclick="openModal('storeModal')">🛒 TIENDA</button>
+  <button class="side-btn" onclick="openModal('royaleModal')">🎰 LUCK ROYALE</button>
+  <button class="side-btn" onclick="openModal('passModal')">🎁 PASE BOOYAH</button>
+  <button class="side-btn" onclick="openModal('missionsModal')">📋 MISIONES</button>
+  <button class="side-btn" onclick="openModal('eventsModal')">📅 EVENTOS</button>
+</div>
+
+<!-- 👩‍🦰 Personaje Principal -->
+<div class="char-area">
+  <div class="char-container">
+    <div class="char-glow"></div>
+    <div class="horns">👿</div>
+    <div class="char-body">🧝‍♀️</div>
+  </div>
+  <div class="char-name">🌙 LUNA SANGRIENTA</div>
+</div>
+
+<!-- 🎭 Botón Emotes -->
+<button class="emote-btn" onclick="openEmotes()">🎭</button>
+
+<!-- 📊 Panel de Modo -->
+<div class="mode-panel">
+  <div class="mode-title">BATTLE ROYALE</div>
+  <div class="mode-name" id="currentMode">LOBO SOLITARIO</div>
+  <div class="mode-map">🗺️ Bermuda</div>
+  <div class="mode-buttons">
+    <button class="mode-btn btn-change" onclick="openModal('modeModal')">CAMBIAR</button>
+    <button class="mode-btn btn-info" onclick="openModal('infoModal')">ℹ️</button>
+  </div>
+</div>
+
+<!-- 🎮 Barra Inferior -->
+<div class="bottom-bar">
+  <div class="bottom-left">
+    <div class="bot-nav" onclick="openModal('inventoryModal')">
+      <div class="bot-nav-icon">📦</div>
+      <div>INVENTARIO</div>
+    </div>
+    <div class="bot-nav" onclick="openModal('weaponsModal')">
+      <div class="bot-nav-icon">🔫</div>
+      <div>ARMAS</div>
+    </div>
+    <div class="bot-nav" onclick="openModal('clothesModal')">
+      <div class="bot-nav-icon">👗</div>
+      <div>ROPA</div>
+    </div>
+    <div class="bot-nav" onclick="openModal('presetModal')">
+      <div class="bot-nav-icon">⚙️</div>
+      <div>PRESET</div>
+    </div>
+    <div class="bot-nav" onclick="openModal('specialModal')">
+      <div class="bot-nav-icon">⭐</div>
+      <div>ESPECIAL</div>
+    </div>
+  </div>
+  <button class="start-btn" onclick="startGame()">▶️ INICIAR</button>
+  <div class="bot-nav" onclick="openModal('profileModal')">
+    <div class="bot-nav-icon">👤</div>
+    <div>PERFIL</div>
+  </div>
+</div>
+
+<!-- 🎭 Rueda de Emotes -->
+<div class="emote-wheel" id="emoteWheel">
+  <button class="close-emotes" onclick="closeEmotes()">×</button>
+  <div class="emote-grid">
+    <div class="emote-item" onclick="useEmote('💃')">💃</div>
+    <div class="emote-item" onclick="useEmote('🕺')">🕺</div>
+    <div class="emote-item" onclick="useEmote('👏')">👏</div>
+    <div class="emote-item" onclick="useEmote('💪')">💪</div>
+    <div class="emote-item" onclick="useEmote('😎')">😎</div>
+    <div class="emote-item" onclick="useEmote('🔥')">🔥</div>
+    <div class="emote-item" onclick="useEmote('❤️')">❤️</div>
+    <div class="emote-item" onclick="useEmote('🏆')">🏆</div>
+    <div class="emote-item" onclick="useEmote('👋')">👋</div>
+    <div class="emote-item" onclick="useEmote('😜')">😜</div>
+    <div class="emote-item" onclick="useEmote('🤩')">🤩</div>
+    <div class="emote-item" onclick="useEmote('💥')">💥</div>
+    <div class="emote-item" onclick="useEmote('🎉')">🎉</div>
+    <div class="emote-item" onclick="useEmote('😇')">😇</div>
+    <div class="emote-item" onclick="useEmote('🤪')">🤪</div>
+    <div class="emote-item" onclick="useEmote('🖤')">🖤</div>
+  </div>
+</div>
+
+<!-- 🎮 Modal Modos de Juego -->
+<div class="modal" id="modeModal">
+  <div class="modal-header">
+    <h2 class="modal-title">🎮 MODO DE JUEGO</h2>
+    <button class="close-btn" onclick="closeModal('modeModal')">×</button>
+  </div>
+  <div class="modal-content">
+    <div class="mode-card active" onclick="selectMode('LOBO SOLITARIO')">
+      <div class="mode-card-img">🐺</div>
+      <div class="mode-card-body">
+        <div class="mode-card-title">LOBO SOLITARIO</div>
+        <div class="mode-card-desc">1 vs 1 — ¡Sin escuadras!</div>
+      </div>
+    </div>
+    <div class="mode-card" onclick="selectMode('BR CLASIFICATORIA')">
+      <div class="mode-card-img">🏆</div>
+      <div class="mode-card-body">
+        <div class="mode-card-title">BR CLASIFICATORIA</div>
+        <div class="mode-card-desc">Sube de rango — Bermuda</div>
+      </div>
+    </div>
+    <div class="mode-card" onclick="selectMode('DUO')">
+      <div class="mode-card-img">👥</div>
+      <div class="mode-card-body">
+        <div class="mode-card-title">DÚO</div>
+        <div class="mode-card-desc">Juega con un compañero</div>
+      </div>
+    </div>
+    <div class="mode-card" onclick="selectMode('ESCUADRA')">
+      <div class="mode-card-img">🛡️</div>
+      <div class="mode-card-body">
+        <div class="mode-card-title">ESCUADRA</div>
+        <div class="mode-card-desc">4 jugadores — ¡Trabajo en equipo!</div>
+      </div>
+    </div>
+    <div class="mode-card" onclick="selectMode('SALA')">
+      <div class="mode-card-img">🏠</div>
+      <div class="mode-card-body">
+        <div class="mode-card-title">SALA PRIVADA</div>
+        <div class="mode-card-desc">Crea tu propia partida</div>
+      </div>
+    </div>
+    <button class="btn-action btn-primary" onclick="closeModal('modeModal')">CONFIRMAR</button>
+  </div>
+</div>
+
+<!-- 🔫 Armas -->
+<div class="modal" id="weaponsModal">
+  <div class="modal-header">
+    <h2 class="modal-title">🔫 ARMAS</h2>
+    <button class="close-btn" onclick="closeModal('weaponsModal')">×</button>
+  </div>
+  <div class="modal-content">
+    <div class="weapons-grid">
+      <div class="weapon-item active" onclick="selectWeapon('AK-47 Dorada')"><div class="weapon-icon">🔫</div><div class="weapon-name">AK-47 Dorada</div></div>
+      <div class="weapon-item" onclick="selectWeapon('M4A1')"><div class="weapon-icon">🔫</div><div class="weapon-name">M4A1</div></div>
+      <div class="weapon-item" onclick="selectWeapon('MP40')"><div class="weapon-icon">🔫</div><div class="weapon-name">MP40</div></div>
+      <div class="weapon-item" onclick="selectWeapon('SCAR')"><div class="weapon-icon">🔫</div><div class="weapon-name">SCAR</div></div>
+      <div class="weapon-item" onclick="selectWeapon('AWM')"><div class="weapon-icon">🎯</div><div class="weapon-name">AWM</div></div>
+      <div class="weapon-item" onclick="selectWeapon('M1887')"><div class="weapon-icon">🔫</div><div class="weapon-name">M1887</div></div>
+      <div class="weapon-item" onclick="selectWeapon('P90')"><div class="weapon-icon">🔫</div><div class="weapon-name">P90</div></div>
+      <div class="weapon-item" onclick="selectWeapon('Grenada')"><div class="weapon-icon">💣</div><div class="weapon-name">Grenada</div></div>
+    </div>
+    <button class="btn-action btn-primary" onclick="closeModal('weaponsModal')">EQUIPAR</button>
+  </div>
+</div>
+
+<!-- 👗 Ropa -->
+<div class="modal" id="clothesModal">
+  <div class="modal-header">
+    <h2 class="modal-title">👗 ROPA</h2>
+    <button class="close-btn" onclick="closeModal('clothesModal')">×</button>
+  </div>
+  <div class="modal-content">
+    <div class="clothes-grid">
+      <div class="clothes-item active" onclick="selectClothes('Conjunto Luna Sangrienta')"><div class="clothes-icon">👗</div><div class="clothes-name">Luna Sangrienta</div></div>
+      <div class="clothes-item" onclick="selectClothes('Vestido Dorado')"><div class="clothes-icon">👗</div><div class="clothes-name">Vestido Dorado</div></div>
+      <div class="clothes-item" onclick="selectClothes('Pantalón Jeans')"><div class="clothes-icon">👖</div><div class="clothes-name">Jeans</div></div>
+      <div class="clothes-item" onclick="selectClothes('Camiseta Roja')"><div class="clothes-icon">👚</div><div class="clothes-name">Camiseta Roja</div></div>
+      <div class="clothes-item" onclick="selectClothes('Chaqueta Negra')"><div class="clothes-icon">🧥</div><div class="clothes-name">Chaqueta Negra</div></div>
+      <div class="clothes-item" onclick="selectClothes('Falda Morada')"><div class="clothes-icon">👗</div><div class="clothes-name">Falda Morada</div></div>
+      <div class="clothes-item" onclick="selectClothes('Top Deportivo')"><div class="clothes-icon">👚</div><div class="clothes-name">Top Deportivo</div></div>
+      <div class="clothes-item" onclick="selectClothes('Conjunto de Cuero')"><div class="clothes-icon">🧥</div><div class="clothes-name">Cuero</div></div>
+    </div>
+    <button class="btn-action btn-primary" onclick="closeModal('clothesModal')">PONERSE</button>
+  </div>
+</div>
+
+<!-- 👤 Personajes -->
+<div class="modal" id="charsModal">
+  <div class="modal-header">
+    <h2 class="modal-title">👤 PERSONAJES</h2>
+    <button class="close-btn" onclick="closeModal('charsModal')">×</button>
+  </div>
+  <div class="modal-content">
+    <div class="chars-grid">
+      <div class="char-item active" onclick="selectChar('Alok')"><div class="char-item-icon">🎧</div><div class="char-item-name">Alok</div></div>
+      <div class="char-item" onclick="selectChar('Homero')"><div class="char-item-icon">🥊</div><div class="char-item-name">Homero</div></div>
+      <div class="char-item" onclick="selectChar('Wukong')"><div class="char-item-icon">🐵</div><div class="char-item-name">Wukong</div></div>
+      <div class="char-item" onclick="selectChar('Sonia')"><div class="char-item-icon">❄️</div><div class="char-item-name">Sonia</div></div>
+      <div class="char-item" onclick="selectChar('Dasha')"><div class="char-item-icon">🏃‍♀️</div><div class="char-item-name">Dasha</div></div>
+      <div class="char-item" onclick="selectChar('Kelly')"><div class="char-item-icon">⚡</div><div class="char-item-name">Kelly</div></div>
+      <div class="char-item" onclick="selectChar('Maxim')"><div class="char-item-icon">🍖</div><div class="char-item-name">Maxim</div></div>
+      <div class="char-item" onclick="selectChar('Kapella')"><div class="char-item-icon">🎤</div><div class="char-item-name">Kapella</div></div>
+    </div>
+    <button class="btn-action btn-primary" onclick="closeModal('charsModal')">SELECCIONAR</button>
+  </div>
+</div>
+
+<!-- 📄 Perfil -->
+<div class="modal" id="profileModal">
+  <div class="modal-header">
+    <h2 class="modal-title">📄 PERFIL</h2>
+    <button class="close-btn" onclick="closeModal('profileModal')">×</button>
+  </div>
+  <div class="modal-content">
+    <div class="profile-card">
+      <div class="profile-header">
+        <div class="profile-avatar">🔥</div>
+        <div class="profile-info">
+          <h2>MÓNICA FF</h2>
+          <p>Nivel 35 • Heroico</p>
+          <p style="color:#aaa; font-size:12px;">UID: 14285936324</p>
+        </div>
+      </div>
+      <div class="profile-stats">
+        <div class="stat-box"><div class="stat-val">79.17%</div><div class="stat-label">Cabeza</div></div>
+        <div class="stat-box"><div class="stat-val">82.76%</div><div class="stat-label">BR</div></div>
+        <div class="stat-box"><div class="stat-val">292</div><div class="stat-label">Likes</div></div>
+        <div class="stat-box"><div class="stat-val">2,271</div><div class="stat-label">Puntos</div></div>
+        <div class="stat-box"><div class="stat-val">552</div><div class="stat-label">Victorias</div></div>
+        <div class="stat-box"><div class="stat-val">🏆</div><div class="stat-label">Heroico</div></div>
+      </div>
+    </div>
+    <button class="btn-action btn-secondary" onclick="closeModal('profileModal')">CERRAR</button>
+  </div>
+</div>
+
+<!-- 🛒 Tienda -->
+<div class="modal" id="storeModal">
+  <div class="modal-header">
+    <h2 class="modal-title">🛒 TIENDA</h2>
+    <button class="close-btn" onclick="closeModal('storeModal')">×</button>
+  </div>
+  <div class="modal-content">
+    <div class="mode-card" onclick="buyItem('Paquete Luna Sangrienta', 500)">
+      <div class="mode-card-img">🌙</div>
+      <div class="mode-card-body">
+        <div class="mode-card-title">Paquete Luna Sangrienta</div>
+        <div class="mode-card-desc">Cuernitos dorados + conjunto completo</div>
+      </div>
+    </div>
+    <div class="mode-card" onclick="buyItem('100 Diamantes', 0, 100)">
+      <div class="mode-card-img">💎</div>
+      <div class="mode-card-body">
+        <div class="mode-card-title">💎 100 Diamantes</div>
+        <div class="mode-card-desc">Recarga diamantes</div>
+      </div>
+    </div>
+    <div class="mode-card" onclick="buyItem('Skin de Arma Legendaria', 300)">
+      <div class="mode-card-img">🔫</div>
+      <div class="mode-card-body">
+        <div class="mode-card-title">🔫 Skin Legendaria</div>
+        <div class="mode-card-desc">AK-47 Dorada — Efectos visuales</div>
+      </div>
+    </div>
+    <div class="mode-card" onclick="buyItem('Vestido Dorado', 200)">
+      <div class="mode-card-img">👗</div>
+      <div class="mode-card-body">
+        <div class="mode-card-title">👗 Vestido Dorado</div>
+        <div class="mode-card-desc">Ropa exclusiva para Mónica FF</div>
+      </div>
+    </div>
+    <button class="btn-action btn-secondary" onclick="closeModal('storeModal')">CERRAR</button>
+  </div>
+</div>
+
+<!-- Otros modales -->
+<div class="modal" id="royaleModal"><div class="modal-header"><h2 class="modal-title">🎰 LUCK ROYALE</h2><button class="close-btn" onclick="closeModal('royaleModal')">×</button></div><div class="modal-content"><p style="text-align:center; padding:30px;">Gira y gana premios increíbles 🎁</p><button class="btn-action btn-primary" onclick="spinRoyale()">GIRAR 🎰</button><button class="btn-action btn-secondary" onclick="closeModal('royaleModal')">CERRAR</button></div></div>
+<div class="modal" id="passModal"><div class="modal-header"><h2 class="modal-title">🎁 PASE BOOYAH</h2><button class="close-btn" onclick="closeModal('passModal')">×</button></div><div class="modal-content"><p style="text-align:center; padding:30px;">Desbloquea recompensas exclusivas 💎</p><button class="btn-action btn-primary" onclick="alert('¡Pase activado! 🎁')">ACTIVAR PASE</button><button class="btn-action btn-secondary" onclick="closeModal('passModal')">CERRAR</button></div></div>
+<div class="modal" id="missionsModal"><div class="modal-header"><h2 class="modal-title">📋 MISIONES</h2><button class="close-btn" onclick="closeModal('missionsModal')">×</button></div><div class="modal-content"><p style="padding:15px;">✅ Jugar 1 partida — 500 monedas</p><p style="padding:15px;">✅ Matar 5 enemigos — 10 diamantes</p><p style="padding:15px;">⏳ Llegar al Top 1 — Paquete especial</p><button class="btn-action btn-secondary" onclick="closeModal('missionsModal')">CERRAR</button></div></div>
+<div class="modal" id="eventsModal"><div class="modal-header"><h2 class="modal-title">📅 EVENTOS</h2><button class="close-btn" onclick="closeModal('eventsModal')">×</button></div><div class="modal-content"><p style="text-align:center; padding:30px;">🔥 ¡9º Aniversario! 🎂<br>Recompensas diarias gratis</p><button class="btn-action btn-primary" onclick="claimReward()">RECLAMAR PREMIO</button><button class="btn-action btn-secondary" onclick="closeModal('eventsModal')">CERRAR</button></div></div>
+<div class="modal" id="inventoryModal"><div class="modal-header"><h2 class="modal-title">📦 INVENTARIO</h2><button class="close-btn" onclick="closeModal('inventoryModal')">×</button></div><div class="modal-content"><p style="text-align:center; padding:30px;">Tus objetos y coleccionables 🎒</p><button class="btn-action btn-secondary" onclick="closeModal('inventoryModal')">CERRAR</button></div></div>
+<div class="modal" id="presetModal"><div class="modal-header"><h2 class="modal-title">⚙️ PRESET</h2><button class="close-btn" onclick="closeModal('presetModal')">×</button></div><div class="modal-content"><p style="text-align:center; padding:30px;">Configura tu carga ⚙️</p><button class="btn-action btn-secondary" onclick="closeModal('presetModal')">CERRAR</button></div></div>
+<div class="modal" id="specialModal"><div class="modal-header"><h2 class="modal-title">⭐ ESPECIAL</h2><button class="close-btn" onclick="closeModal('specialModal')">×</button></div><div class="modal-content"><p style="text-align:center; padding:30px;">Objetos especiales y exclusivos ⭐</p><button class="btn-action btn-secondary" onclick="closeModal('specialModal')">CERRAR</button></div></div>
+<div class="modal" id="infoModal"><div class="modal-header"><h2 class="modal-title">ℹ️ INFORMACIÓN</h2><button class="close-btn" onclick="closeModal('infoModal')">×</button></div><div class="modal-content"><p style="padding:15px;"><strong>LOBO SOLITARIO</strong><br>Modo 1 vs 1 en mapas pequeños. ¡Gana el mejor! 🏆</p><button class="btn-action btn-secondary" onclick="closeModal('infoModal')">CERRAR</button></div></div>
+
+<script>
+// Mostrar aviso de pantalla horizontal
+window.addEventListener('load', () => {
+  if (window.innerHeight > window.innerWidth) {
+    document.getElementById('rotateNotice').classList.add('show');
+  }
+});
+
+// Monedas y diamantes aumentados
+let goldCoins = 999999;
+let diamonds = 50000;
+
+function updateCurrency(){
+  document.getElementById('goldCoins').textContent = '💰 ' + goldCoins.toLocaleString();
+  document.getElementById('diamonds').textContent = '💎 ' + diamonds.toLocaleString();
+}
+
+// 🎭 Emotes funcionales
+function openEmotes(){ document.getElementById('emoteWheel').classList.add('active'); }
+function closeEmotes(){ document.getElementById('emoteWheel').classList.remove('active'); }
+function useEmote(emoji){
+  closeEmotes();
+
+  // Eliminar emotes anteriores
+  const old = document.querySelector('.emote-display');
+  if(old) old.remove();
+
+  // Mostrar emote en pantalla
+  const emoteEl = document.createElement('div');
+  emoteEl.className = 'emote-display';
+  emoteEl.textContent = emoji;
+  document.body.appendChild(emoteEl);
+
+  // Reproducir sonido de tecla si quieres
+  try {
+    const audio = new AudioContext();
+    const osc = audio.createOscillator();
+    const gain = audio.createGain();
+    osc.connect(gain);
+    gain.connect(audio.destination);
+    osc.frequency.value = 800;
+    gain.gain.value = 0.1;
+    osc.start();
+    gain.gain.exponentialRampToValueAtTime(0.001, audio.currentTime + 0.15);
+    osc.stop(audio.currentTime + 0.15);
+  } catch(e) {}
+
+  // Quitar emote después de la animación
+  setTimeout(() => emoteEl.remove(), 2000);
+}
+
+// 🪟 Modales
+function openModal(id){ document.getElementById(id).classList.add('active'); }
+function closeModal(id){ document.getElementById(id).classList.remove('active'); }
+
+// 🎮 Modo de Juego
+function selectMode(name){
+  document.getElementById('currentMode').textContent = name;
+  document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('active'));
+  event.target.closest('.mode-card').classList.add('active');
+}
+
+// 🔫 Armas
+function selectWeapon(name){
+  document.querySelectorAll('.weapon-item').forEach(w => w.classList.remove('active'));
+  event.target.closest('.weapon-item').classList.add('active');
+  alert('✅ Arma equipada: ' + name);
+}
+
+// 👗 Ropa
+function selectClothes(name){
+  document.querySelectorAll('.clothes-item').forEach(c => c.classList.remove('active'));
+  event.target.closest('.clothes-item').classList.add('active');
+  alert('✅ Ropa puesta: ' + name);
+}
+
+// 👤 Personajes
+function selectChar(name){
+  document.querySelectorAll('.char-item').forEach(c => c.classList.remove('active'));
+  event.target.closest('.char-item').classList.add('active');
+  alert('✅ Personaje seleccionado: ' + name);
+}
+
+// 🛒 Comprar
+function buyItem(name, costGold = 0, costDiamond = 0){
+  if(costGold > 0 && goldCoins >= costGold){
+    goldCoins -= costGold;
+    updateCurrency();
+    alert('✅ Compraste: ' + name + ' por ' + costGold + ' monedas');
+  }else if(costDiamond > 0 && diamonds >= costDiamond){
+    diamonds -= costDiamond;
+    updateCurrency();
+    alert('✅ Compraste: ' + name + ' por ' + costDiamond + ' diamantes');
+  }else{
+    alert('❌ No tienes suficientes monedas o diamantes');
+  }
+}
+
+// 🎰 Luck Royale
+function spinRoyale(){
+  const prizes = ['100 monedas', '50 diamantes', 'Skin de arma', 'Caja misteriosa', 'Rara vestimenta', 'Nada'];
+  const prize = prizes[Math.floor(Math.random() * prizes.length)];
+
+  if(prize !== 'Nada'){
+    goldCoins += 100;
+    diamonds += 10;
+    updateCurrency();
+  }
+
+  alert('🎰 ¡Giraste y ganaste: ' + prize + '!');
+}
+
+// 🎁 Reclamar evento
+function claimReward(){
+  goldCoins += 500;
+  diamonds += 50;
+  updateCurrency();
+  alert('✅ Reclamaste: 500 monedas y 50 diamantes 🎉');
+}
+
+// ▶️ Iniciar Partida
+function startGame(){
+  const mode = document.getElementById('currentMode').textContent;
+  alert('🎮 ¡Partida de ' + mode + ' iniciada! 🐺\nCargando mapa... ¡Buena suerte, MÓNICA FF! 🏆');
+}
+</script>
+
+</body>
+</html>
