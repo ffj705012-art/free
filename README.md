@@ -1,2 +1,2 @@
 # free
-free-fire
+freefire
